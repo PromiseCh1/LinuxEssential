@@ -1,0 +1,64 @@
+# ===============================
+# 🧪 LAB 8 – Linux System Enumeration & Security Audit
+# ===============================
+
+# Lab Title:
+# System Enumeration for Privilege Escalation & Security Assessment
+
+# Description:
+# Enumeration is the most important step in hacking & defense.
+# This lab teaches how to gather system information like:
+# - Kernel version
+# - Running services
+# - SUID files
+# - Writable directories
+# These are commonly checked during penetration testing.
+
+
+# ===============================
+# Lab Tasks:
+# ===============================
+# 1. Identify OS and kernel version
+# 2. List running services
+# 3. Find SUID binaries
+# 4. Find world-writable directories
+# 5. Check sudo privileges
+# 6. Save all findings into audit_report.txt
+
+
+# ===============================
+# Related Commands:
+# ===============================
+
+# Create report file
+touch audit_report.txt
+
+
+# ===============================
+# Answers:
+# ===============================
+
+echo "===== SYSTEM INFORMATION =====" > audit_report.txt
+uname -a >> audit_report.txt
+cat /etc/os-release >> audit_report.txt
+
+echo "===== CURRENT USER =====" >> audit_report.txt
+whoami >> audit_report.txt
+id >> audit_report.txt
+
+echo "===== RUNNING SERVICES =====" >> audit_report.txt
+ps aux >> audit_report.txt
+
+echo "===== LISTENING PORTS =====" >> audit_report.txt
+ss -tulnp >> audit_report.txt
+
+echo "===== SUID FILES =====" >> audit_report.txt
+find / -perm -4000 2>/dev/null >> audit_report.txt
+
+echo "===== WORLD WRITABLE DIRECTORIES =====" >> audit_report.txt
+find / -type d -perm -0002 2>/dev/null >> audit_report.txt
+
+echo "===== SUDO PRIVILEGES =====" >> audit_report.txt
+sudo -l >> audit_report.txt
+
+echo "Audit Complete. Check audit_report.txt"
