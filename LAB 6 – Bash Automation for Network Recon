@@ -1,0 +1,75 @@
+# ===============================
+# 🧪 LAB 6 – Bash Automation for Network Recon
+# ===============================
+
+# Lab Title:
+# Bash Script for Automated Host Discovery & Port Scanning
+
+# Description:
+# In real-world cybersecurity, automation is critical.
+# This lab builds a basic reconnaissance script that:
+# - Accepts target input
+# - Checks if host is alive
+# - Scans common ports
+# - Logs results into a file
+# This simulates an entry-level recon workflow.
+
+
+# ===============================
+# Lab Tasks:
+# ===============================
+# 1. Create a bash script named recon.sh
+# 2. Accept target IP/domain as user input
+# 3. Ping the target to check availability
+# 4. Scan common ports (22, 80, 443)
+# 5. Save results into recon_report.txt
+# 6. Make the script executable
+# 7. Run the script
+
+
+# ===============================
+# Related Commands:
+# ===============================
+
+nano recon.sh
+
+
+# ===============================
+# Answers (Script Code):
+# ===============================
+
+#!/bin/bash
+
+echo "Enter Target IP or Domain:"
+read target
+
+echo "Starting Recon on $target" | tee recon_report.txt
+echo "----------------------------------" >> recon_report.txt
+
+# Check if host is alive
+ping -c 2 $target > /dev/null
+
+if [ $? -eq 0 ]; then
+    echo "[+] Host is Alive" | tee -a recon_report.txt
+else
+    echo "[-] Host is Down" | tee -a recon_report.txt
+    exit
+fi
+
+echo "[+] Scanning Common Ports..." | tee -a recon_report.txt
+
+for port in 22 80 443
+do
+    timeout 1 bash -c "echo > /dev/tcp/$target/$port" 2>/dev/null &&
+    echo "Port $port is OPEN" | tee -a recon_report.txt ||
+    echo "Port $port is CLOSED" >> recon_report.txt
+done
+
+echo "[+] Recon Complete. Results saved in recon_report.txt"
+
+
+# Make executable
+chmod +x recon.sh
+
+# Run script
+./recon.sh
