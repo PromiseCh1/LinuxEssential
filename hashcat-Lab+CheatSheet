@@ -1,6 +1,6 @@
 # Hashcat Ultimate Cheatsheet
 
-## 📚 **Table of Contents**
+ 📚 **Table of Contents**
 1. [Installation & Setup](#installation)
 2. [Basic Syntax](#syntax)
 3. [Attack Modes](#attacks)
@@ -14,23 +14,22 @@
 
 ---
 
-## 🔧 **1. Installation & Setup** <a name="installation"></a>
+ 🔧 **1. Installation & Setup**
 
-### On Kali Linux:
-```bash
+# On Kali Linux:
 sudo apt update
 sudo apt install hashcat hashcat-utils
 ```
 
-### Verify Installation:
-```bash
+# Verify Installation:
+
 hashcat --version
 hashcat -I  # Show GPU info
 hashcat -b  # Benchmark all algorithms
 ```
 
-### Common Issues Fix:
-```bash
+# Common Issues Fix:
+ 
 # If you get "Unstable driver" warning
 hashcat --force
 
@@ -44,13 +43,13 @@ clinfo
 
 ---
 
-## 📝 **2. Basic Syntax** <a name="syntax"></a>
+ 📝 **2. Basic Syntax** <a name="syntax"></a>
 
-```bash
+ 
 hashcat [options] hashfile [mask|wordfile|directory]
 ```
 
-### Common Options:
+# Common Options:
 | Option | Description |
 |--------|-------------|
 | `-m` | Hash type (0 for MD5, 1000 for NTLM) |
@@ -66,38 +65,38 @@ hashcat [options] hashfile [mask|wordfile|directory]
 
 ---
 
-## ⚔️ **3. Attack Modes (-a)** <a name="attacks"></a>
+ ⚔️ **3. Attack Modes (-a)** <a name="attacks"></a>
 
-### **Mode 0: Straight/Dictionary Attack**
-```bash
+# **Mode 0: Straight/Dictionary Attack**
+ 
 hashcat -a 0 -m 0 hashes.txt wordlist.txt
 ```
 - Uses wordlist as-is
 - Fastest for common passwords
 
-### **Mode 1: Combinator Attack**
-```bash
+# **Mode 1: Combinator Attack**
+ 
 hashcat -a 1 -m 0 hashes.txt wordlist1.txt wordlist2.txt
 ```
 - Combines words from two lists
 - `word1 + word2 = word1word2`
 
-### **Mode 3: Brute-force/Mask Attack**
-```bash
+# **Mode 3: Brute-force/Mask Attack**
+ 
 hashcat -a 3 -m 0 hashes.txt ?l?l?l?l?l
 ```
 - Custom character sets
 - Most flexible for pattern-based passwords
 
-### **Mode 6: Hybrid Dictionary + Mask**
-```bash
+# **Mode 6: Hybrid Dictionary + Mask**
+ 
 hashcat -a 6 -m 0 hashes.txt wordlist.txt ?d?d
 ```
 - Appends mask to each word
 - `password + 01 = password01`
 
-### **Mode 7: Hybrid Mask + Dictionary**
-```bash
+# **Mode 7: Hybrid Mask + Dictionary**
+ 
 hashcat -a 7 -m 0 hashes.txt ?d?d wordlist.txt
 ```
 - Prepends mask to each word
@@ -105,7 +104,7 @@ hashcat -a 7 -m 0 hashes.txt ?d?d wordlist.txt
 
 ---
 
-## 🔐 **4. Common Hash Types (-m)** <a name="hashes"></a>
+ 🔐 **4. Common Hash Types (-m)** <a name="hashes"></a>
 
 | Type | Code | Example Hash | Notes |
 |------|------|--------------|-------|
@@ -124,15 +123,15 @@ hashcat -a 7 -m 0 hashes.txt ?d?d wordlist.txt
 | Bitcoin Wallet | 11300 | | |
 
 **List all:**
-```bash
+ 
 hashcat --help | grep -A 200 "Hash types"
 ```
 
 ---
 
-## 🔢 **5. Brute-force Mask Attacks** <a name="masks"></a>
+ 🔢 **5. Brute-force Mask Attacks** <a name="masks"></a>
 
-### **Basic Character Sets:**
+# **Basic Character Sets:**
 | Mask | Meaning | Example |
 |------|---------|---------|
 | `?l` | lowercase | abcdefghijklmnopqrstuvwxyz |
@@ -142,8 +141,8 @@ hashcat --help | grep -A 200 "Hash types"
 | `?a` | all (l+u+d+s) | Everything |
 | `?b` | binary (0x00 - 0xff) | For binary attacks |
 
-### **Custom Character Sets:**
-```bash
+# **Custom Character Sets:**
+ 
 # Define custom charset 1
 -1 ?l?d                    # lowercase + digits
 -2 ?l?s                    # lowercase + special
@@ -153,32 +152,32 @@ hashcat --help | grep -A 200 "Hash types"
 hashcat -a 3 -m 0 hashes.txt -1 ?l?d ?1?1?1?1?1
 ```
 
-### **Common Mask Patterns:**
+# **Common Mask Patterns:**
 
-#### **Phone Numbers:**
-```bash
+ **Phone Numbers:**
+ 
 ?d?d?d?d?d?d?d?d?d?d      # 10-digit US number
 ?d?d?d-?d?d?d-?d?d?d?d    # 555-123-4567
 ```
 
-#### **Dates:**
-```bash
+ **Dates:**
+ 
 ?d?d?d?d?d?d?d?d          # YYYYMMDD
 ?d?d?d?d?d?d              # YYMMDD
 ?d?d?d?d                  # 4-digit year
 ?d?d?d1?d?d?d?d?d?d?d     # Contains "1" (like 1984)
 ```
 
-#### **Common Password Patterns:**
-```bash
+ **Common Password Patterns:**
+ 
 ?u?l?l?l?l?d?d?d          # Capital + 4 lowercase + 3 digits (Pass123)
 ?l?l?l?l?l?d?d?d?d        # 5 letters + 4 digits (hello1234)
 ?u?l?l?l?l?s?d?d?d        # Capital, 4 lowercase, special, 3 digits
 ?u?l?l?l?l?d?d?d?s        # Ends with special char
 ```
 
-### **Increment Mode:**
-```bash
+# **Increment Mode:**
+ 
 --increment               # Try all lengths from min to max
 --increment-min=4         # Start from 4 chars
 --increment-max=8         # Stop at 8 chars
@@ -189,9 +188,9 @@ hashcat -a 3 -m 0 hashes.txt ?l?l?l?l?l?l?l?l --increment
 
 ---
 
-## 🎯 **6. Rules Engine** <a name="rules"></a>
+ 🎯 **6. Rules Engine** <a name="rules"></a>
 
-### **Basic Rule Operations:**
+# **Basic Rule Operations:**
 | Rule | Meaning | Example |
 |------|---------|---------|
 | `:` | No operation | `password` → `password` |
@@ -211,8 +210,8 @@ hashcat -a 3 -m 0 hashes.txt ?l?l?l?l?l?l?l?l --increment
 | `sXY` | Substitute X with Y | `soa` → `p0ssword` |
 | `@X` | Purge character X | `@s` → `paord` |
 
-### **Built-in Rule Files:**
-```bash
+# **Built-in Rule Files:**
+ 
 # List available rules
 ls /usr/share/hashcat/rules/
 
@@ -225,8 +224,8 @@ rockyou-30000.rule       # From rockyou leak
 T0XlC-insert_00-99_1950-2050_toprules_0_F.rule
 ```
 
-### **Using Rules:**
-```bash
+# **Using Rules:**
+ 
 # Single rule file
 hashcat -a 0 -m 0 hashes.txt wordlist.txt -r best64.rule
 
@@ -237,8 +236,8 @@ hashcat -a 0 -m 0 hashes.txt wordlist.txt -r rules/best64.rule -r rules/InsidePr
 echo "u $1 $1 $1" | hashcat -a 0 -m 0 hashes.txt wordlist.txt -r -
 ```
 
-### **Create Custom Rules:**
-```bash
+# **Create Custom Rules:**
+ 
 # Create myrules.rule
 nano myrules.rule
 
@@ -263,10 +262,10 @@ hashcat -a 0 -m 0 hashes.txt wordlist.txt -r myrules.rule
 
 ---
 
-## ⚡ **7. Optimization & Performance** <a name="optimization"></a>
+ ⚡ **7. Optimization & Performance** <a name="optimization"></a>
 
-### **GPU Optimization:**
-```bash
+# **GPU Optimization:**
+ 
 # Use optimized kernels
 -O
 
@@ -286,8 +285,8 @@ hashcat -a 0 -m 0 hashes.txt wordlist.txt -r myrules.rule
 --gpu-temp-abort=95 # Stop at 95°C
 ```
 
-### **Performance Tips:**
-```bash
+# **Performance Tips:**
+ 
 # 1. Use --force if you get warnings
 # 2. Use -O for faster cracking (if supported)
 # 3. Use -w 3 for best balance
@@ -297,10 +296,10 @@ hashcat -a 0 -m 0 hashes.txt wordlist.txt -r myrules.rule
 
 ---
 
-## 🛠️ **8. Useful Commands** <a name="commands"></a>
+ 🛠️ **8. Useful Commands** <a name="commands"></a>
 
-### **Session Management:**
-```bash
+# **Session Management:**
+ 
 # Start named session
 hashcat -m 0 -a 0 --session=mysession hashes.txt wordlist.txt
 
@@ -317,8 +316,8 @@ hashcat --session=mysession --stop
 hashcat --session=mysession --runtime=10 --status
 ```
 
-### **File Operations:**
-```bash
+# **File Operations:**
+ 
 # Show cracked passwords
 hashcat hashes.txt --show
 
@@ -332,8 +331,8 @@ hashcat hashes.txt --potfile-path=my.potfile
 hashcat hashes.txt --potfile-disable
 ```
 
-### **Debugging:**
-```bash
+# **Debugging:**
+ 
 # Test without cracking
 hashcat -a 0 -m 0 --stdout wordlist.txt | head -20
 
@@ -346,11 +345,11 @@ hashcat -a 0 --stdout wordlist.txt -r best64.rule | head -50
 
 ---
 
-## 🏋️ **9. Practice Examples** <a name="practice"></a>
+ 🏋️ **9. Practice Examples** <a name="practice"></a>
 
-### **Beginner Exercises:**
+# **Beginner Exercises:**
 
-```bash
+ 
 # 1. Simple dictionary attack
 echo -e "5f4dcc3b5aa765d61d8327deb882cf99\n482c811da5d5b4bc6d497ffa98491e38" > hashes.txt
 hashcat -m 0 hashes.txt /usr/share/wordlists/rockyou.txt
@@ -369,9 +368,9 @@ hashcat -m 0 -a 3 hashes.txt ?d?d?d?d
 hashcat -m 0 -a 3 hashes.txt ?l?l?l?l?l
 ```
 
-### **Intermediate Exercises:**
+# **Intermediate Exercises:**
 
-```bash
+ 
 # 1. Hybrid attack (word + 2 digits)
 hashcat -m 0 -a 6 hashes.txt mylist.txt ?d?d
 
@@ -390,9 +389,9 @@ hashcat -m 0 -a 3 hashes.txt ?l?l?l?l?l?l?l?l --increment
 hashcat -m 0 hashes.txt mylist.txt -r best64.rule -r combinator.rule
 ```
 
-### **Advanced Exercises:**
+# **Advanced Exercises:**
 
-```bash
+ 
 # 1. Date-based passwords
 hashcat -m 0 -a 3 hashes.txt ?d?d?d?d?d?d?d?d  # YYYYMMDD
 
@@ -413,12 +412,12 @@ hashcat --restore --session=bigcrack
 
 ---
 
-## 🧰 **10. Other Tools** <a name="tools"></a>
+ 🧰 **10. Other Tools** <a name="tools"></a>
 
-### **Wordlist Tools:**
+# **Wordlist Tools:**
 
-#### **Crunch** (Generate wordlists):
-```bash
+ **Crunch** (Generate wordlists):
+ 
 # Install
 sudo apt install crunch
 
@@ -433,8 +432,8 @@ crunch 6 6 -t @@@%%^ -o pattern.txt
 # @ = lowercase, % = digit, ^ = special
 ```
 
-#### **Cewl** (Website wordlist generator):
-```bash
+ **Cewl** (Website wordlist generator):
+ 
 # Install
 sudo apt install cewl
 
@@ -443,34 +442,34 @@ cewl https://example.com -d 2 -m 5 -w wordlist.txt
 # -d = depth, -m = min word length
 ```
 
-#### **rsmangler** (Wordlist mutator):
-```bash
+ **rsmangler** (Wordlist mutator):
+ 
 # Clone and install
 git clone https://github.com/digininja/RSMangler
 cd RSMangler
 ./rsmangler.py --file input.txt --output mangled.txt
 ```
 
-### **Hash Identification:**
+# **Hash Identification:**
 
-#### **hash-identifier**:
-```bash
+ **hash-identifier**:
+ 
 hash-identifier
 # Enter hash, it guesses type
 ```
 
-#### **hashid**:
-```bash
+ **hashid**:
+ 
 hashid "5f4dcc3b5aa765d61d8327deb882cf99"
 ```
 
-### **Online Hash Crackers:**
+# **Online Hash Crackers:**
 - **Crackstation**: https://crackstation.net/
 - **Hashkiller**: https://hashkiller.io/
 - **MD5Decrypt**: https://md5decrypt.net/
 
-### **Rainbow Tables:**
-```bash
+# **Rainbow Tables:**
+ 
 # Use rcracki_mt
 sudo apt install rcracki-mt
 rcracki_mt -h MD5_HASH rainbow_table/
@@ -478,9 +477,9 @@ rcracki_mt -h MD5_HASH rainbow_table/
 
 ---
 
-## 📊 **Performance Reference**
+ 📊 **Performance Reference**
 
-### **Expected Speeds (RTX 4070 Laptop):**
+# **Expected Speeds (RTX 4070 Laptop):**
 | Hash Type | Speed (approx) |
 |-----------|----------------|
 | MD5 | 20,000-30,000 MH/s |
@@ -490,14 +489,14 @@ rcracki_mt -h MD5_HASH rainbow_table/
 | WPA2 | 150-300 kH/s |
 | bcrypt | 10-50 H/s |
 
-### **Wordlist Sizes:**
+# **Wordlist Sizes:**
 - **rockyou.txt**: 14 million passwords
 - **rockyou2021.txt**: 8.4 billion (needs download)
 - **crackstation.txt**: 1.5 billion (15GB)
 
 ---
 
-## 🎓 **Learning Path**
+ 🎓 **Learning Path**
 
 1. **Week 1**: Master `-a 0` (dictionary) with rockyou.txt
 2. **Week 2**: Learn rules (`-r best64.rule`)
@@ -510,9 +509,9 @@ rcracki_mt -h MD5_HASH rainbow_table/
 
 ---
 
-## 🆘 **Troubleshooting**
+ 🆘 **Troubleshooting**
 
-```bash
+ 
 # Hashcat not recognizing GPU
 hashcat -I --force
 
@@ -529,8 +528,6 @@ hashcat -O -w 3
 hashcat --force
 ```
 
-**Remember**: Always practice legally! Only crack hashes you own or have permission to test.
 
----
 
 Save this cheatsheet as `hashcat_cheatsheet.md` for quick reference!
