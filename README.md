@@ -12,7 +12,7 @@ It includes:
 - Process and service management
 - Linux networking commands
 - Bash scripting fundamentals
-- Log analysis using grep, awk, sed
+- Log analysis using grep,
 - Security tools and reconnaissance labs
 - System hardening techniques
 
