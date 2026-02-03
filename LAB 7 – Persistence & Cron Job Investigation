@@ -1,0 +1,68 @@
+# ===============================
+# 🧪 LAB 7 – Persistence & Cron Job Investigation
+# ===============================
+
+# Lab Title:
+# Detecting Malicious Scheduled Tasks (Cron Job Audit)
+
+# Description:
+# Attackers often create cron jobs for persistence.
+# This lab simulates:
+# - Creating a suspicious cron job
+# - Detecting cron persistence
+# - Removing malicious entry
+# This develops blue-team auditing skills.
+
+
+# ===============================
+# Lab Tasks:
+# ===============================
+# 1. Create a fake malicious script
+# 2. Schedule it using cron (runs every minute)
+# 3. List cron jobs
+# 4. Identify suspicious cron entry
+# 5. Remove the malicious cron job
+
+
+# ===============================
+# Related Commands:
+# ===============================
+
+# Create malicious script simulation
+echo '#!/bin/bash
+echo "Malicious activity running" >> /tmp/persist.log' > /tmp/malware.sh
+
+chmod +x /tmp/malware.sh
+
+# Edit cron jobs
+crontab -e
+
+
+# ===============================
+# Answers:
+# ===============================
+
+# Add this inside crontab editor:
+
+* * * * * /tmp/malware.sh
+
+# Save and exit
+
+
+# View active cron jobs
+crontab -l
+
+# Check system-wide cron jobs
+ls -la /etc/cron*
+cat /etc/crontab
+
+# Monitor if script runs
+cat /tmp/persist.log
+
+# Remove malicious cron job
+crontab -e
+
+# Delete the malicious line and save
+
+# Confirm removal
+crontab -l
