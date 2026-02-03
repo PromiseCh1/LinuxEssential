@@ -1,0 +1,73 @@
+# ===============================
+# 🧪 LAB 9 – Brute Force Attack Simulation & Log Analysis
+# ===============================
+
+# Lab Title:
+# Detecting SSH Brute Force Attacks Using Log Analysis
+
+# Description:
+# Brute force attacks are very common in real-world servers.
+# In this lab you will:
+# - Simulate multiple failed login attempts
+# - Analyze authentication logs
+# - Extract attacking IP addresses
+# - Identify most frequent attacker
+# - Generate a security report
+# This simulates a real SOC investigation.
+
+
+# ===============================
+# Lab Tasks:
+# ===============================
+# 1. Generate fake SSH failed login logs
+# 2. Identify failed login attempts
+# 3. Count total failed attempts
+# 4. Extract attacker IP addresses
+# 5. Find top attacking IP
+# 6. Save findings in brute_force_report.txt
+
+
+# ===============================
+# Related Commands:
+# ===============================
+
+# Create simulated log file
+nano auth.log
+
+
+# ===============================
+# Paste Sample Log Data:
+# ===============================
+
+Failed password for invalid user admin from 192.168.1.10 port 22
+Failed password for root from 192.168.1.10 port 22
+Failed password for root from 192.168.1.11 port 22
+Failed password for invalid user test from 192.168.1.10 port 22
+Accepted password for user from 192.168.1.50 port 22
+Failed password for root from 192.168.1.11 port 22
+Failed password for root from 192.168.1.11 port 22
+
+
+# ===============================
+# Answers:
+# ===============================
+
+echo "===== BRUTE FORCE ANALYSIS =====" > brute_force_report.txt
+
+# Count failed attempts
+echo "Total Failed Attempts:" >> brute_force_report.txt
+grep -c "Failed password" auth.log >> brute_force_report.txt
+
+# Extract attacker IP addresses
+echo "Attacker IP Addresses:" >> brute_force_report.txt
+grep "Failed password" auth.log | awk '{print $(NF-3)}' >> brute_force_report.txt
+
+# Count attacks per IP
+echo "Attack Count Per IP:" >> brute_force_report.txt
+grep "Failed password" auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -nr >> brute_force_report.txt
+
+# Identify top attacker
+echo "Top Attacker:" >> brute_force_report.txt
+grep "Failed password" auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -nr | head -n 1 >> brute_force_report.txt
+
+echo "Analysis Complete. Check brute_force_report.txt"
