@@ -1,0 +1,84 @@
+# ===============================
+# 🧪 LAB 10 – Linux Server Hardening & Basic Defense Setup
+# ===============================
+
+# Lab Title:
+# Hardening a Linux Server Against Common Attacks
+
+# Description:
+# This lab focuses on defensive security.
+# You will:
+# - Update system packages
+# - Configure firewall
+# - Disable root SSH login
+# - Change SSH port
+# - Install fail2ban
+# - Verify hardened configuration
+# These are real-world server protection techniques.
+
+
+# ===============================
+# Lab Tasks:
+# ===============================
+# 1. Update and upgrade system
+# 2. Enable firewall and allow required ports
+# 3. Disable root SSH login
+# 4. Change default SSH port
+# 5. Install and configure fail2ban
+# 6. Verify firewall and fail2ban status
+
+
+# ===============================
+# Answers:
+# ===============================
+
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Enable UFW firewall
+sudo apt install ufw -y
+sudo ufw enable
+
+# Allow SSH (current default 22)
+sudo ufw allow 22/tcp
+
+# Check firewall status
+sudo ufw status verbose
+
+# Edit SSH configuration
+sudo nano /etc/ssh/sshd_config
+
+
+# ===============================
+# Modify These Lines Inside sshd_config:
+# ===============================
+
+Port 2222
+PermitRootLogin no
+
+
+# Save and exit, then restart SSH
+
+sudo systemctl restart ssh
+
+# Allow new SSH port
+sudo ufw allow 2222/tcp
+
+# Remove old SSH port rule (optional after testing)
+sudo ufw delete allow 22/tcp
+
+# Install Fail2ban
+sudo apt install fail2ban -y
+
+# Start and enable fail2ban
+sudo systemctl start fail2ban
+sudo systemctl enable fail2ban
+
+# Check fail2ban status
+sudo systemctl status fail2ban
+
+# Verify SSH jail
+sudo fail2ban-client status
+sudo fail2ban-client status sshd
+
+echo "System Hardening Complete"
